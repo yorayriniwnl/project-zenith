@@ -1,0 +1,45 @@
+{
+  "product": "Yor // Zenith",
+  "version": "1.0.0",
+  "colors": {
+    "void": "#000000",
+    "graphite": "#050505",
+    "panel": "#0b0808",
+    "crimson": "#e84b4b",
+    "deepCrimson": "#671515",
+    "warmAccent": "#ff8a7f",
+    "warmWhite": "#f5eaea",
+    "muted": "#c4c4c4",
+    "gold": "#e7bd78",
+    "line": "rgba(245, 234, 234, 0.14)"
+  },
+  "gradients": {
+    "signal": "linear-gradient(135deg, #671515 0%, #e84b4b 52%, #050505 100%)",
+    "void": "linear-gradient(180deg, #0b0808 0%, #000000 100%)",
+    "warm": "linear-gradient(135deg, #f5eaea 0%, #ff8a7f 100%)"
+  },
+  "typography": {
+    "display": "Georgia, 'Times New Roman', serif",
+    "ui": "'Avenir Next', 'Segoe UI', sans-serif",
+    "technical": "'Cascadia Mono', 'SFMono-Regular', Consolas, monospace",
+    "tracking": "0.18em"
+  },
+  "geometry": {
+    "radiusPanel": "28px",
+    "radiusControl": "999px",
+    "gridUnit": "8px"
+  },
+  "motion": {
+    "fast": "160ms",
+    "standard": "260ms",
+    "slow": "700ms",
+    "reducedMotion": "prefers-reduced-motion"
+  },
+  "evidenceStates": [
+    "VERIFIED",
+    "ESTIMATE",
+    "DEMO",
+    "EXPERIMENTAL",
+    "PLANNED"
+  ]
+}

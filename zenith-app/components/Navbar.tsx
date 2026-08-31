@@ -1,145 +1,116 @@
-"use client";
+"use client"
 
-
-import { useCallback, useEffect, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { Sun, Menu, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react"
+import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { ArrowUpRight, Menu, X } from "lucide-react"
 
 const NAV_LINKS = [
-  { id: "get-started", label: "Get Started" },
-  { id: "features", label: "Features" },
-  { id: "how-it-works", label: "Why Zenith" },
+  { id: "get-started", label: "Start" },
+  { id: "features", label: "Signals" },
+  { id: "how-it-works", label: "Method" },
   { id: "intelligence", label: "Intelligence" },
-  { id: "testimonials", label: "Testimonials" },
-  { id: "pricing", label: "Pricing" },
+  { id: "pricing", label: "Access" },
   { id: "faq", label: "FAQ" },
-];
+]
 
 export default function Navbar() {
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const router = useRouter()
+  const pathname = usePathname()
+  const [isScrolled, setIsScrolled] = useState(false)
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(() => typeof window !== "undefined" && localStorage.getItem("isLoggedIn") === "true")
 
   const syncLoginState = useCallback(() => {
-    const loginState = localStorage.getItem("isLoggedIn");
-    setIsLoggedIn(loginState === "true");
-  }, []);
+    setIsLoggedIn(localStorage.getItem("isLoggedIn") === "true")
+  }, [])
 
-  // Scroll detection
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    const handleScroll = () => setIsScrolled(window.scrollY > 24)
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
-  // Login detection
   useEffect(() => {
-    const handleStorageChange = () => syncLoginState();
-
-    window.addEventListener("storage", handleStorageChange);
-    window.addEventListener("auth-changed", handleStorageChange);
-
+    const handleStorageChange = () => syncLoginState()
+    window.addEventListener("storage", handleStorageChange)
+    window.addEventListener("auth-changed", handleStorageChange)
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      window.removeEventListener("auth-changed", handleStorageChange);
-    };
-  }, [syncLoginState]);
-
-  useEffect(() => {
-    syncLoginState();
-  }, [pathname, syncLoginState]);
+      window.removeEventListener("storage", handleStorageChange)
+      window.removeEventListener("auth-changed", handleStorageChange)
+    }
+  }, [syncLoginState])
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("redirectAfterLogin");
-    setIsLoggedIn(false);
-    window.dispatchEvent(new Event("auth-changed"));
-    router.push("/");
-  };
+    localStorage.removeItem("isLoggedIn")
+    localStorage.removeItem("redirectAfterLogin")
+    setIsLoggedIn(false)
+    window.dispatchEvent(new Event("auth-changed"))
+    router.push("/")
+  }
 
-  const scrollToId = (id?: string) => {
-    if (!id) return;
-
+  const scrollToId = (id: string) => {
+    setIsOpen(false)
     if (pathname !== "/") {
-      router.push("/");
-      setTimeout(() => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 300);
-    } else {
-      const el = document.getElementById(id);
-      if (el) el.scrollIntoView({ behavior: "smooth" });
+      router.push(`/#${id}`)
+      return
     }
-  };
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" })
+  }
 
   return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-300 border-b ${
-        isScrolled
-           ? "bg-[#030303]/80 backdrop-blur-xl border-white/10 py-4"
-           : "bg-transparent border-transparent py-6"
-      }`}
-    >
-      <div className="max-w-[84rem] mx-auto px-16 lg:px-20 flex items-center justify-between">
-        {/* Brand */}
-        <div
-          className="flex items-center gap-3 cursor-pointer group"
-          onClick={() => {
-            router.push("/");
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
-        >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center">
-            <Sun size={22} className="text-black" />
-          </div>
-          <span className="text-2xl font-bold tracking-tight text-white">
-            Zenith
+    <nav className={`yor-nav fixed top-0 z-50 w-full border-b transition-all duration-300 ${isScrolled ? "yor-nav--scrolled py-3" : "py-4"}`}>
+      <div className="yor-nav__inner flex items-center justify-between gap-4">
+        <Link href="/" className="yor-brand" aria-label="Zenith home">
+          <span className="yor-brand__mark" aria-hidden="true">Z</span>
+          <span>
+            <span className="yor-brand__name">ZENITH</span>
+            <span className="yor-brand__sub">solar decision intelligence</span>
           </span>
-        </div>
+        </Link>
 
-        {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-8 whitespace-nowrap">
+        <div className="hidden items-center gap-5 lg:flex">
           {NAV_LINKS.map((link) => (
-            <button
-              key={link.id}
-              onClick={() => scrollToId(link.id)}
-              className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
-            >
+            <button key={link.id} onClick={() => scrollToId(link.id)} className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--yor-muted)] transition-colors hover:text-[var(--yor-white)]">
               {link.label}
             </button>
           ))}
         </div>
 
-        {/* Desktop Actions */}
-        <div className="hidden lg:flex items-center gap-5">
+        <div className="hidden items-center gap-3 sm:flex">
+          <span className="yor-state yor-state--hot">BETA / INDIA</span>
           {!isLoggedIn ? (
-            <button
-              onClick={() => router.push("/login")}
-              className="text-sm font-medium text-gray-300 hover:text-white transition"
-            >
-              Sign In
+            <button onClick={() => router.push("/login")} className="yor-button yor-button--quiet px-4 py-2">
+              Sign in <ArrowUpRight size={14} />
             </button>
           ) : (
-            <button
-              onClick={handleLogout}
-              className="text-sm font-medium text-gray-400 hover:text-white transition"
-            >
-              Log Out
-            </button>
+            <button onClick={handleLogout} className="yor-button yor-button--quiet px-4 py-2">Log out</button>
           )}
         </div>
 
-        {/* Mobile Toggle */}
-        <button
-          className="lg:hidden text-white"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
+        <button className="yor-button !min-h-0 border-0 bg-transparent p-2 hover:bg-white/5 lg:hidden" onClick={() => setIsOpen((open) => !open)} aria-label={isOpen ? "Close navigation" : "Open navigation"} aria-expanded={isOpen}>
+          {isOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
+
+      {isOpen && (
+        <div className="yor-nav__inner mt-3 rounded-2xl border border-white/10 bg-black/95 p-3 shadow-2xl lg:hidden">
+          <div className="grid gap-1">
+            {NAV_LINKS.map((link) => (
+              <button key={link.id} onClick={() => scrollToId(link.id)} className="rounded-xl px-3 py-3 text-left text-sm font-semibold text-[var(--yor-muted)] hover:bg-white/5 hover:text-[var(--yor-white)]">
+                {link.label}
+              </button>
+            ))}
+          </div>
+          <div className="mt-3 border-t border-white/10 pt-3 sm:hidden">
+            {!isLoggedIn ? (
+              <button onClick={() => { setIsOpen(false); router.push("/login") }} className="yor-button yor-button--primary w-full">Sign in <ArrowUpRight size={14} /></button>
+            ) : (
+              <button onClick={handleLogout} className="yor-button yor-button--quiet w-full">Log out</button>
+            )}
+          </div>
+        </div>
+      )}
     </nav>
-  );
+  )
 }

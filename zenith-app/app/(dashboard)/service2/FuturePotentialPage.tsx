@@ -766,7 +766,7 @@ const [isAiLoading, setIsAiLoading] = useState(false);
             </div>
 
             <div className="w-full flex-grow relative z-10">
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 1, height: 1 }}>
                 <ComposedChart data={chartData} margin={{ top: 10, right: 0, left: -20, bottom: 0 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
                   <XAxis dataKey="year" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
@@ -794,7 +794,7 @@ const [isAiLoading, setIsAiLoading] = useState(false);
               <h3 className="text-sm font-bold mb-1 flex items-center gap-2"><Clock size={16} className="text-amber-400" /> Typical Daily Dispatch Flow</h3>
               <p className="text-[10px] text-slate-400 mb-4">Simulated 24-hour profile mapping generation vs load.</p>
               <div className="flex-grow">
-                <ResponsiveContainer width="100%" height="100%">
+                <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 1, height: 1 }}>
                   <AreaChart data={HOURLY_PROFILE} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorSolar" x1="0" y1="0" x2="0" y2="1">

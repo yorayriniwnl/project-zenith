@@ -3127,7 +3127,7 @@ try {
               </div>
             </div>
             <div style={{padding:"0 14px 18px",height:"265px"}}>
-              <ResponsiveContainer width="100%" height="100%">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 1, height: 1 }}>
                 {tab==="energy"?(
                   <AreaChart data={energy} margin={{top:5,right:5,left:-18,bottom:0}}>
                     <defs>
