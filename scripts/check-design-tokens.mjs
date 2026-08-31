@@ -24,4 +24,4 @@ if (JSON.stringify(tokens.evidenceStates) !== JSON.stringify(requiredStates)) {
   throw new Error('YOR evidence state vocabulary is incomplete or reordered')
 }
 
-console.log('YOR token contract valid:', path.pathname)
+process.stdout.write(`YOR token contract valid: ${path.pathname}\n`)
